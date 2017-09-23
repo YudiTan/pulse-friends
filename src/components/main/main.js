@@ -11,6 +11,8 @@ class Main extends React.Component {
     this.state = {
       userToken: null,
       userID: null,
+      movies: null,
+      userName: null
     }
   }
 
@@ -36,12 +38,17 @@ class Main extends React.Component {
   facebookLogin() {
     window.FB.login(function(response) {
       this.statusChangeCallback(response);
-    }.bind(this), { scope: 'email, public_profile, user_friends'});
+    }.bind(this), { scope: 'email, public_profile, user_friends, user_likes'});
   }
 
   facebookLogout() {
     window.FB.logout();
-    this.setState({userToken:null, userID:null});
+    this.setState({
+      userToken: null,
+      userID: null,
+      movies: null,
+      userName: null
+    });
   }
 
   checkLoginState() {
@@ -52,18 +59,33 @@ class Main extends React.Component {
 
   statusChangeCallback(response) {
     if (response.status === 'connected') {
-      this.setState({userToken: response.authResponse.accessToken, userID: response.authResponse.userID});
-      this.fetchDataFacebook();
+      this.setState({
+        userToken: response.authResponse.accessToken,
+        userID: response.authResponse.userID,
+        movies: this.state.movies,
+        userName: this.state.userName});
+      // getting the user's full name
+      window.FB.api('/me', user => {
+        this.setState({
+          userToken: this.state.userToken,
+          userID:this.state.userID,
+          movies:this.state.movies,
+          userName: user.name});
+      });
+      // getting the list of user's liked movies
+      window.FB.api(`/${this.state.userID}/movies`, movie => {
+        this.setState({
+          userToken: this.state.userToken,
+          userID:this.state.userID,
+          movies:movie.data,
+          userName:this.state.userName});
+      })
     } else if (response.status === 'unknown') {
       window.FB.login();
     }
   }
 
-  fetchDataFacebook() {
-    window.FB.api('/me', function(user) {
-      console.log('Successful login: ' + user);
-    });
-  }
+
 
   render() {
     return (
@@ -86,7 +108,7 @@ class Main extends React.Component {
                onClick={ () => this.facebookLogin() }/>}
 
            </AppBar>
-           <FriendsList friends={this.state.accessToken}/>
+           {this.state.userToken ? <FriendsList name={this.state.userName} movies={this.state.movies}/> : <h3> Please login to proceed. </h3>}
     </div>
     );
   }
