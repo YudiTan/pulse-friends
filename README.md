@@ -1,5 +1,7 @@
 # Pulse Interview Assignment
 
+Logs in via Facebook SDK Api and fetches user's list of liked movies.
+
 To get started, run "npm install" after cloning the folder.
 
 Then, run "npm run" and it should work.
