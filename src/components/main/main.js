@@ -108,8 +108,10 @@ class Main extends React.Component {
                onClick={ () => this.facebookLogin() }/>}
 
            </AppBar>
-           {this.state.userToken ? <FriendsList name={this.state.userName} movies={this.state.movies}/> : <h3> Please login to proceed. </h3>}
-    </div>
+           <div className="center">
+             {this.state.userToken ? <FriendsList name={this.state.userName} movies={this.state.movies}/> : <h4> Please login to proceed. </h4>}
+          </div>
+        </div>
     );
   }
 }

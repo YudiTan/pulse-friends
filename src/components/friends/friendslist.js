@@ -23,10 +23,8 @@ class FriendsList extends React.Component {
 
     return (
       <div>
-        <p>Hello {this.state.name}</p>
-        <ul>
+        <p><em>Hello {this.state.name}</em></p>
           {this.state.movies}
-        </ul>
       </div>
 
     );

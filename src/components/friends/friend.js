@@ -5,14 +5,12 @@ class Friend extends React.Component {
 
   render() {
     return (
-      <div className="container">
         <Card>
           <CardHeader
             title={this.props.movieName}
             actAsExpander={false}
             showExpandableButton={false}/>
         </Card>
-      </div>
     )
   }
 }
